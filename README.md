@@ -7,11 +7,12 @@ The **Article Similarity Graph** is a tool designed to help you visually explore
 - **Central Focus**: The main article appears at the center of the graph, with related articles positioned around it. The closer an article is to the center, the more similar it is to the main topic.
 
 - **Clustering and Zooming**:
-    - As you zoom out, closely related articles automatically **group into clusters**. These clusters appear as larger circles, making it easier to view groups of similar articles without clutter.
-    - When you zoom back in, the clusters **separate into individual articles** again for detailed exploration.
+
+  - As you zoom out, closely related articles automatically **group into clusters**. These clusters appear as larger circles, making it easier to view groups of similar articles without clutter.
+  - When you zoom back in, the clusters **separate into individual articles** again for detailed exploration.
 
 - **Interactive Exploration**:
-    - Hover over articles or clusters to see titles and additional information.
+  - Hover over articles or clusters to see titles and additional information.
 
 ## Benefits
 
