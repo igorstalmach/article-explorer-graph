@@ -16,3 +16,10 @@ export const calculatePosition = (similarity: number) => {
 
   return [x, y];
 };
+
+export const calculateDistance = (similarity: number) => {
+  const distance =
+    similarity * (Math.sqrt(Math.pow(SCREEN_WIDTH / 4, 2) + Math.pow(SCREEN_HEIGHT / 4, 2))) * 0.50;
+
+  return distance;
+};
