@@ -9,7 +9,7 @@ export type GraphProps = {
   nodes: NodeType[];
 };
 
-export type NodeEntry = {
+export type GraphNodeType = {
   id: number;
   name?: string;
   x?: number;
@@ -17,13 +17,13 @@ export type NodeEntry = {
   nodeRelSize?: number;
 };
 
-export type LinkEntry = {
+export type GraphLinkType = {
   source: number;
   target: number;
   distance?: number;
 };
 
-export type NodeData = {
-  nodes: NodeEntry[];
-  links: LinkEntry[];
+export type GraphData = {
+  nodes: GraphNodeType[];
+  links: GraphLinkType[];
 };
