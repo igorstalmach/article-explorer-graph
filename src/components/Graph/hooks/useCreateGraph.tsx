@@ -3,13 +3,20 @@ import { useEffect, useRef, useState } from "react";
 import { GraphData, NodeType } from "../types.ts";
 import * as d3 from "d3-force";
 import { calculateDistance } from "../utils/calculatePosition.ts";
+import { getRandomColor } from "../utils/getRandomColor.ts";
 
 export const useCreateGraph = ({ nodes }: UseCreateGraphProps) => {
   let didMount = false;
   const forceGraphRef = useRef<any>();
   const mainNode: NodeType = nodes.filter((node) => node.isTarget)[0];
   const [graphData, setGraphData] = useState<GraphData>({
-    nodes: [{ id: mainNode && mainNode.id, name: mainNode && mainNode.name }],
+    nodes: [
+      {
+        id: mainNode && mainNode.id,
+        name: mainNode && mainNode.name,
+        color: "red",
+      },
+    ],
     links: [],
   });
 
@@ -24,7 +31,10 @@ export const useCreateGraph = ({ nodes }: UseCreateGraphProps) => {
       if (mainNode && !node.isTarget) {
         setGraphData((prevState) => ({
           ...prevState,
-          nodes: [...prevState.nodes, { id: node.id, name: node.name }],
+          nodes: [
+            ...prevState.nodes,
+            { id: node.id, name: node.name, color: getRandomColor() },
+          ],
           links: [
             ...prevState.links,
             { source: node.id, target: mainNode.id, distance: nodeDistance },
@@ -39,5 +49,5 @@ export const useCreateGraph = ({ nodes }: UseCreateGraphProps) => {
     didMount ? updateNodes() : (didMount = true);
   }, []);
 
-  return [graphData, forceGraphRef] as const;
+  return { graphData, forceGraphRef } as const;
 };
