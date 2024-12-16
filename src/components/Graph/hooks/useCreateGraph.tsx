@@ -1,11 +1,10 @@
-import { GraphProps, GraphData, NodeType } from "./types.ts";
-import { calculateDistance } from "./utils/calculatePosition.ts";
-import ForceGraph2D from "react-force-graph-2d";
-// import ForceGraph3D from "react-force-graph-3d";
-import * as d3 from "d3-force";
+import { UseCreateGraphProps } from "./types.ts";
 import { useEffect, useRef, useState } from "react";
+import { GraphData, NodeType } from "../types.ts";
+import * as d3 from "d3-force";
+import { calculateDistance } from "../utils/calculatePosition.ts";
 
-export const Graph = ({ nodes }: GraphProps) => {
+export const useCreateGraph = ({ nodes }: UseCreateGraphProps) => {
   let didMount = false;
   const forceGraphRef = useRef<any>();
   const mainNode: NodeType = nodes.filter((node) => node.isTarget)[0];
@@ -40,5 +39,5 @@ export const Graph = ({ nodes }: GraphProps) => {
     didMount ? updateNodes() : (didMount = true);
   }, []);
 
-  return <ForceGraph2D graphData={graphData} ref={forceGraphRef} />;
+  return [graphData, forceGraphRef] as const;
 };

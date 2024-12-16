@@ -1,5 +1,7 @@
-import { Graph } from "./components/Graph";
+import { Graph2D, Graph3D } from "./components/Graph";
 import { NodeType } from "./components/Graph/types.ts";
+import { Switch } from "antd";
+import { useState } from "react";
 
 const SAMPLE_NODES: NodeType[] = [
   { id: 1, name: "Theory of Relativity", similarity: 0.5, isTarget: false },
@@ -20,17 +22,26 @@ const SAMPLE_NODES: NodeType[] = [
 ];
 
 export const App = () => {
+  const [is3D, setIs3D] = useState(false);
+
   return (
     <div
       style={{
         width: "100%",
         height: "100%",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
       }}
     >
-      <Graph nodes={SAMPLE_NODES} />
+      <Switch
+        style={{ position: "absolute", zIndex: 2, right: 50, bottom: 50 }}
+        checkedChildren={"3D"}
+        unCheckedChildren={"2D"}
+        onChange={() => setIs3D(!is3D)}
+      />
+      {is3D ? (
+        <Graph3D nodes={SAMPLE_NODES} />
+      ) : (
+        <Graph2D nodes={SAMPLE_NODES} />
+      )}
     </div>
   );
 };
