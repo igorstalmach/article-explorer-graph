@@ -22,7 +22,7 @@ const SAMPLE_NODES: NodeType[] = [
 ];
 
 export const App = () => {
-  const [is3D, setIs3D] = useState(false);
+  const [is3D, setIs3D] = useState(true);
 
   return (
     <div
@@ -35,6 +35,7 @@ export const App = () => {
         style={{ position: "absolute", zIndex: 2, right: 50, bottom: 50 }}
         checkedChildren={"3D"}
         unCheckedChildren={"2D"}
+        defaultChecked
         onChange={() => setIs3D(!is3D)}
       />
       {is3D ? (

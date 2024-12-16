@@ -15,7 +15,6 @@ export type GraphNodeType = {
   x?: number;
   y?: number;
   z?: number;
-  nodeRelSize?: number;
   color: string;
 };
 
@@ -23,6 +22,8 @@ export type GraphLinkType = {
   source: number;
   target: number;
   distance?: number;
+  color?: string;
+  name?: string;
 };
 
 export type GraphData = {
