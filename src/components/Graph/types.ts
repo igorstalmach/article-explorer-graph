@@ -16,6 +16,7 @@ export type GraphNodeType = {
   y?: number;
   z?: number;
   color: string;
+  size?: number;
 };
 
 export type GraphLinkType = {

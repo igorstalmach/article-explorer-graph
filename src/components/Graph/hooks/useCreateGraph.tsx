@@ -5,6 +5,8 @@ import * as d3 from "d3-force";
 import { calculateDistance, getRandomColor } from "../utils";
 
 const LINK_COLOR = "#29727e";
+
+const MAIN_NODE_SIZE = 30;
 const MAIN_NODE_COLOR = "red";
 
 export const useCreateGraph = ({ nodes }: UseCreateGraphProps) => {
@@ -17,6 +19,7 @@ export const useCreateGraph = ({ nodes }: UseCreateGraphProps) => {
         id: mainNode && mainNode.id,
         name: mainNode && mainNode.name,
         color: MAIN_NODE_COLOR,
+        size: MAIN_NODE_SIZE,
       },
     ],
     links: [],
@@ -48,7 +51,8 @@ export const useCreateGraph = ({ nodes }: UseCreateGraphProps) => {
         target: node.id,
         distance: calculateDistance(node.similarity),
         color: LINK_COLOR,
-        name: `Similarity: ${node.similarity.toFixed(2)}`,
+        // TODO: Fix during integration with backend.
+        name: `Similarity: ${(1 - Number(node.similarity)).toFixed(2)}`,
       });
     });
 
