@@ -1,10 +1,19 @@
 import { Input, Tooltip } from "antd";
 import { Typography } from "antd";
+import { useState } from "react";
+import { parseArticleString } from "../../utils/utils";
+import { RequestParams } from "../../types";
 
 const { Search } = Input;
 const { Title } = Typography;
 
-export const SearchView = () => {
+export const SearchView = ({ handleSearch }: { handleSearch: (arg0: RequestParams | null) => void }) => {
+  const [articleLink, setArticleLink] = useState("")
+  
+  const handleSubmitSearch = () => {
+    handleSearch(parseArticleString(articleLink))
+  }
+
   return (
     <div
       style={{
@@ -34,6 +43,8 @@ export const SearchView = () => {
           <Search
             style={{ width: "100%" }}
             placeholder="Link to article..."
+            onChange={(e) => setArticleLink(e.target.value)}
+            onSearch={handleSubmitSearch}
             enterButton
           />
         </Tooltip>
