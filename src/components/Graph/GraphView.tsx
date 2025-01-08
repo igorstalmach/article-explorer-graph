@@ -3,6 +3,7 @@ import { Switch } from "antd";
 import { Graph3D } from "./Graph3D.tsx";
 import { Graph2D } from "./Graph2D.tsx";
 import { NodeType } from "./types.ts";
+import { ArticleResponse } from "../../types";
 
 const SAMPLE_NODES: NodeType[] = [
   { id: 1, name: "Theory of Relativity", similarity: 0.5, isTarget: false },
@@ -22,7 +23,7 @@ const SAMPLE_NODES: NodeType[] = [
   { id: 10, name: "Quantum Entanglement", similarity: 0.9, isTarget: false },
 ];
 
-export const GraphView = () => {
+export const GraphView = ({ articleData }: { articleData: ArticleResponse }) => {
   const [is3D, setIs3D] = useState(false);
 
   return (

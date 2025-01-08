@@ -7,7 +7,7 @@ import { RequestParams } from "../../types";
 const { Search } = Input;
 const { Title } = Typography;
 
-export const SearchView = ({ handleSearch }: { handleSearch: (arg0: RequestParams | null) => void }) => {
+export const SearchView = ({ handleSearch, isActive }: { handleSearch: (arg0: RequestParams | null) => void , isActive: boolean}) => {
   const [articleLink, setArticleLink] = useState("")
   
   const handleSubmitSearch = () => {
@@ -21,18 +21,29 @@ export const SearchView = ({ handleSearch }: { handleSearch: (arg0: RequestParam
         justifyContent: "center",
         alignItems: "center",
         height: "100%",
-      }}
+      } }
     >
       <div
-        style={{
+        style={ isActive? {
           display: "flex",
           flexDirection: "column",
           justifyContent: "center",
           alignItems: "center",
           width: "clamp(300px, 50%, 500px)",
+        }:
+        {
+          position: "absolute",
+          zIndex: 99,
+          top: 0,
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          marginTop: "1rem",
+          alignItems: "center",
+          width: "clamp(300px, 50%, 500px)",
         }}
       >
-        <Title>Article Explorer</Title>
+        {isActive && <Title>Article Explorer</Title>}
         <Tooltip
           trigger={["focus"]}
           title={
