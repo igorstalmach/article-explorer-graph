@@ -3,6 +3,7 @@ import ForceGraph2D, { NodeObject } from "react-force-graph-2d";
 import { useCreateGraph, useCreateGraphA } from "./hooks";
 import { ArticleResponse } from "../../types";
 import { useCallback, useEffect, useState } from "react";
+import { LinkObject } from "react-force-graph-3d";
 
 const NODE_SIZE = 8;
 
@@ -43,11 +44,14 @@ export const Graph2D = ({ articles, selectedId, selectCallback }: { articles: Ar
     ctx.fill();
   };
 
-  const handleNodeClick = (node: GraphNodeType) => {
+
+
+  const handleNodeClick = (node: NodeObject) => {
     console.log(node)
     selectCallback(node.id)
   }
-  
+
+
 
   return (
     <ForceGraph2D
@@ -63,6 +67,9 @@ export const Graph2D = ({ articles, selectedId, selectCallback }: { articles: Ar
       linkDirectionalParticleWidth={LINK_WIDTH}
       nodeCanvasObject={handlePaintTarget}
       onNodeClick={handleNodeClick}
+      onLinkClick={(link) => console.log(link)}
+      linkColor={(link) => link.source.id == selectedId ? "#1677ff" : link.color? link.color : "grey"}
+
     />
   );
 };

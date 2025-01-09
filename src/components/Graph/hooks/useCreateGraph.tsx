@@ -8,7 +8,7 @@ import { Article, ArticleResponse } from "../../../types";
 const LINK_COLOR = "#29727e";
 
 const MAIN_NODE_SIZE = 30;
-const MAIN_NODE_COLOR = "red";
+const MAIN_NODE_COLOR = "#cd3232";
 
 export const useCreateGraphA = (articles: ArticleResponse) => {
   const forceGraphRef = useRef<any>();
