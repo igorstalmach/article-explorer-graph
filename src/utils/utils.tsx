@@ -8,6 +8,7 @@ export function parseArticleString(input: string): RequestParams | null{
       article_id: arxivIdMatch[1],
       site: "arxiv",
       id_type: "arxiv_id",
+      top_n: 10,
     };
   }
 

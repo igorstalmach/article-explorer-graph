@@ -1,20 +1,34 @@
 import { GraphNodeType, GraphProps } from "./types.ts";
 import ForceGraph3D, { NodeObject } from "react-force-graph-3d";
-import { useCreateGraph } from "./hooks";
-import { useCallback, useEffect } from "react";
+import { useCreateGraph, useCreateGraphA } from "./hooks";
+import { useCallback, useEffect, useState } from "react";
 import * as THREE from "three";
 import { UnrealBloomPass } from "three/examples/jsm/postprocessing/UnrealBloomPass.js";
+import { ArticleResponse } from "../../types";
 
 const NODE_RESOLUTION = 32;
 const NODE_SIZE = 6;
 
 const LINK_RESOLUTION = 32;
 const LINK_WIDTH = 2;
+const vwValue= 87
 
-export const Graph3D = ({ nodes }: GraphProps) => {
-  const { graphData, forceGraphRef } = useCreateGraph({
-    nodes,
-  });
+export const Graph3D = ({ articles, selectedId, selectCallback }: { articles: ArticleResponse; selectedId: number | null }) => {
+  const { graphData, forceGraphRef } = useCreateGraphA(
+    articles
+  );
+  const [pixels, setPixels] = useState(0);
+  useEffect(() => {
+    const calculatePixels = () => {
+      const pxValue = (window.innerWidth * vwValue) / 100;
+      setPixels(pxValue);
+    };
+
+    calculatePixels();
+    window.addEventListener('resize', calculatePixels);
+
+    return () => window.removeEventListener('resize', calculatePixels);
+  }, [vwValue]);
 
   useEffect(() => {
     const bloomPass = new UnrealBloomPass(
@@ -28,18 +42,19 @@ export const Graph3D = ({ nodes }: GraphProps) => {
 
   const handleNodeClick = useCallback(
     (node: GraphNodeType) => {
+      selectCallback(node.id)
       const distance = 80;
       const distRatio = 1 + distance / Math.hypot(node.x!, node.y!, node.z!);
 
-      forceGraphRef.current.cameraPosition(
-        {
-          x: node.x! * distRatio,
-          y: node.y! * distRatio,
-          z: node.z! * distRatio,
-        },
-        node,
-        1500,
-      );
+      // forceGraphRef.current.cameraPosition(
+      //   {
+      //     x: node.x! * distRatio,
+      //     y: node.y! * distRatio,
+      //     z: node.z! * distRatio,
+      //   },
+      //   node,
+      //   1500,
+      // );
     },
     [forceGraphRef],
   );
@@ -48,7 +63,7 @@ export const Graph3D = ({ nodes }: GraphProps) => {
     new THREE.Mesh(
       new THREE.SphereGeometry(node.size ? node.size : 10),
       new THREE.MeshLambertMaterial({
-        color: node.color,
+        color: node.id == selectedId ? "#1677ff" : node.color,
         transparent: false,
         opacity: 1,
       }),
@@ -58,6 +73,7 @@ export const Graph3D = ({ nodes }: GraphProps) => {
     <ForceGraph3D
       graphData={graphData}
       ref={forceGraphRef}
+      width={pixels}
       backgroundColor={"#000001"}
       onNodeClick={handleNodeClick}
       nodeThreeObject={handlePaintTarget}

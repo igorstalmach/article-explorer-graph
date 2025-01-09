@@ -1,13 +1,14 @@
-import { Input, Tooltip } from "antd";
+import { Input, Spin, Tooltip } from "antd";
 import { Typography } from "antd";
 import { useState } from "react";
 import { parseArticleString } from "../../utils/utils";
 import { RequestParams } from "../../types";
+import { LoadingOutlined } from '@ant-design/icons';
 
 const { Search } = Input;
 const { Title } = Typography;
 
-export const SearchView = ({ handleSearch, isActive }: { handleSearch: (arg0: RequestParams | null) => void , isActive: boolean}) => {
+export const SearchView = ({ handleSearch, isActive}: { handleSearch: (arg0: RequestParams | null) => void , isActive: boolean}) => {
   const [articleLink, setArticleLink] = useState("")
   
   const handleSubmitSearch = () => {
@@ -21,6 +22,7 @@ export const SearchView = ({ handleSearch, isActive }: { handleSearch: (arg0: Re
         justifyContent: "center",
         alignItems: "center",
         height: "100%",
+        width: "100%"
       } }
     >
       <div
