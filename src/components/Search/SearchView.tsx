@@ -1,4 +1,4 @@
-import { Input, Spin, Tooltip } from "antd";
+import { Input, Select, Spin, Tooltip } from "antd";
 import { Typography } from "antd";
 import { useState } from "react";
 import { parseArticleString } from "../../utils/utils";
@@ -10,9 +10,9 @@ const { Title } = Typography;
 
 export const SearchView = ({ handleSearch, isActive}: { handleSearch: (arg0: RequestParams | null) => void , isActive: boolean}) => {
   const [articleLink, setArticleLink] = useState("")
-  
+  const [querySize, setQuerySize] = useState(5)
   const handleSubmitSearch = () => {
-    handleSearch(parseArticleString(articleLink))
+    handleSearch(parseArticleString(articleLink, querySize))
   }
 
   return (
@@ -46,7 +46,23 @@ export const SearchView = ({ handleSearch, isActive}: { handleSearch: (arg0: Req
         }}
       >
         {isActive && <Title>Article Explorer</Title>}
-        <Tooltip
+
+          <div style={{
+            display: "flex",
+            width: "100%"
+          }}>
+              <Select
+      defaultValue="5"
+      style={{ width: 70 }}
+      onChange={(value) => setQuerySize(Number.parseInt(value))}
+      options={[
+        { value: '5', label: '5' },
+        { value: '10', label: '10' },
+        { value: '15', label: '15' },
+        { value: '20', label: '20'},
+      ]}
+    />
+            <Tooltip
           trigger={["focus"]}
           title={
             "Supported formats: arXiv link or arXiv article ID (e.g. 2412.12081)"
@@ -61,6 +77,8 @@ export const SearchView = ({ handleSearch, isActive}: { handleSearch: (arg0: Req
             enterButton
           />
         </Tooltip>
+
+          </div>
       </div>
     </div>
   );
