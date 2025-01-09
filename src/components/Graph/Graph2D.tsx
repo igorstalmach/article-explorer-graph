@@ -1,23 +1,42 @@
-import { GraphProps } from "./types.ts";
+import { GraphNodeType, GraphProps } from "./types.ts";
 import ForceGraph2D, { NodeObject } from "react-force-graph-2d";
-import { useCreateGraph } from "./hooks";
+import { useCreateGraph, useCreateGraphA } from "./hooks";
+import { ArticleResponse } from "../../types";
+import { useCallback, useEffect, useState } from "react";
+import { LinkObject } from "react-force-graph-3d";
 
 const NODE_SIZE = 8;
 
 const LINK_WIDTH = 3;
+const vwValue= 87
+export const Graph2D = ({ articles, selectedId, selectCallback }: { articles: ArticleResponse; selectedId: number | null }) => {
 
-export const Graph2D = ({ nodes }: GraphProps) => {
-  const { graphData, forceGraphRef } = useCreateGraph({ nodes });
+  const { graphData, forceGraphRef } = useCreateGraphA(articles);
+  const [pixels, setPixels] = useState(0);
+
+  useEffect(() => {
+    const calculatePixels = () => {
+      const pxValue = (window.innerWidth * vwValue) / 100;
+      setPixels(pxValue);
+    };
+
+    calculatePixels();
+    window.addEventListener('resize', calculatePixels);
+
+    return () => window.removeEventListener('resize', calculatePixels);
+  }, [vwValue]);
 
   const handlePaintTarget = (
     node: NodeObject,
-    ctx: CanvasRenderingContext2D,
+    ctx: CanvasRenderingContext2D
   ) => {
     ctx.beginPath();
-    ctx.fillStyle = node.color;
+    ctx.fillStyle = node.id === selectedId ? "#1677ff" : node.color;
 
     if (node.size) {
       ctx.arc(node.x!, node.y!, 15, 0, 2 * Math.PI, false);
+    } else if (node.id === selectedId) {
+      ctx.arc(node.x!, node.y!, 10, 0, 2 * Math.PI, false);
     } else {
       ctx.arc(node.x!, node.y!, 5, 0, 2 * Math.PI, false);
     }
@@ -25,8 +44,18 @@ export const Graph2D = ({ nodes }: GraphProps) => {
     ctx.fill();
   };
 
+
+
+  const handleNodeClick = (node: NodeObject) => {
+    console.log(node)
+    selectCallback(node.id)
+  }
+
+
+
   return (
     <ForceGraph2D
+    width={pixels}
       graphData={graphData}
       ref={forceGraphRef}
       backgroundColor={"#000011"}
@@ -37,6 +66,10 @@ export const Graph2D = ({ nodes }: GraphProps) => {
       linkDirectionalParticleColor={() => "#b9b9b9"}
       linkDirectionalParticleWidth={LINK_WIDTH}
       nodeCanvasObject={handlePaintTarget}
+      onNodeClick={handleNodeClick}
+      onLinkClick={(link) => console.log(link)}
+      linkColor={(link) => link.source.id == selectedId ? "#1677ff" : link.color? link.color : "grey"}
+
     />
   );
 };
