@@ -1,9 +1,10 @@
-import ForceGraph3D, { NodeObject } from "react-force-graph-3d";
-import { useCreateGraph } from "../../hooks";
 import { useCallback, useEffect } from "react";
+import ForceGraph3D, { NodeObject } from "react-force-graph-3d";
 import * as THREE from "three";
 import { UnrealBloomPass } from "three/examples/jsm/postprocessing/UnrealBloomPass.js";
-import { GraphProps, GraphNodeType } from "../../types";
+
+import { useCreateGraph } from "../../hooks";
+import { GraphNodeType, GraphProps } from "../../types";
 
 const NODE_RESOLUTION = 32;
 const NODE_SIZE = 6;

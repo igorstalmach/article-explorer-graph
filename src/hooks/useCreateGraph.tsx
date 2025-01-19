@@ -1,8 +1,9 @@
-import { useEffect, useRef, useState } from "react";
-import { GraphData, GraphLinkType, GraphNodeType } from "../types";
 import * as d3 from "d3-force";
-import { calculateDistance } from "../utils";
+import { useEffect, useRef, useState } from "react";
+
+import { GraphData, GraphLinkType, GraphNodeType } from "../types";
 import { Article, ArticleResponse } from "../types";
+import { calculateDistance } from "../utils";
 
 const LINK_COLOR = "#29727e";
 

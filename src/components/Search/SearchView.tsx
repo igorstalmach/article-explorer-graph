@@ -1,8 +1,9 @@
 import { Input, Select, Space, Tooltip } from "antd";
 import { Typography } from "antd";
 import { useState } from "react";
-import { parseArticleString } from "../../utils";
+
 import { RequestParams } from "../../types";
+import { parseArticleString } from "../../utils";
 
 const { Search } = Input;
 const { Title } = Typography;
@@ -74,7 +75,7 @@ export const SearchView = ({ handleSearch, isActive }: SearchViewProps) => {
           <Tooltip
             trigger={["focus"]}
             title={
-              "An article ID (e.g. 2412.12081) or a link to arXiv or Scopus is supported"
+              "An article ID (e.g. 2412.12081) or a link to arXiv or Scopus is required"
             }
             placement="bottomLeft"
           >
