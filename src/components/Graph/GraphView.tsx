@@ -1,9 +1,10 @@
-import { useState } from "react";
 import { List, Modal, Switch } from "antd";
-import { Graph3D } from "./Graph3D.tsx";
-import { Graph2D } from "./Graph2D.tsx";
-import { ArticleResponse, SimilarArticle } from "../../types";
 import Paragraph from "antd/es/typography/Paragraph";
+import { useState } from "react";
+
+import { ArticleResponse, SimilarArticle } from "../../types";
+import { Graph2D } from "./Graph2D.tsx";
+import { Graph3D } from "./Graph3D.tsx";
 
 type GraphViewProps = {
   articleData: ArticleResponse;

@@ -1,9 +1,10 @@
+import { Spin, message } from "antd";
+import { useState } from "react";
+
 import { GraphView } from "./components/Graph";
 import { SearchView } from "./components/Search";
-import { useState } from "react";
-import { ArticleResponse, RequestParams } from "./types";
 import { ApiService } from "./services";
-import { message, Spin } from "antd";
+import { ArticleResponse, RequestParams } from "./types";
 
 export const App = () => {
   const [articles, setArticles] = useState<ArticleResponse | null>(null);
