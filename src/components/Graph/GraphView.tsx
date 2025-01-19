@@ -2,7 +2,6 @@ import { useState } from "react";
 import { List, Modal, Switch, Typography } from "antd";
 import { Graph3D } from "./Graph3D.tsx";
 import { Graph2D } from "./Graph2D.tsx";
-import { NodeType } from "./types.ts";
 import { ArticleResponse } from "../../types";
 import Paragraph from "antd/es/typography/Paragraph";
 
