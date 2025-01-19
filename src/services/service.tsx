@@ -1,6 +1,6 @@
 import { ArticleResponse, RequestParams } from "../types";
 
-const API_BASE_URL = "http://127.0.0.1:8000";
+const API_BASE_URL = "http://74.248.108.18";
 const API_GET_POST_PATH = "article/similar/";
 
 export class ApiService {
