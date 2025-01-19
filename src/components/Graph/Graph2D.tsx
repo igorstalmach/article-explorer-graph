@@ -1,5 +1,5 @@
 import ForceGraph2D, { NodeObject } from "react-force-graph-2d";
-import { useCreateGraph } from "./hooks";
+import { useCreateGraph } from "../../hooks";
 import { GraphProps } from "../../types";
 
 const NODE_SIZE = 8;

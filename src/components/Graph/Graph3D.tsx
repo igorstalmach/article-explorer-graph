@@ -1,5 +1,5 @@
 import ForceGraph3D, { NodeObject } from "react-force-graph-3d";
-import { useCreateGraph } from "./hooks";
+import { useCreateGraph } from "../../hooks";
 import { useCallback, useEffect } from "react";
 import * as THREE from "three";
 import { UnrealBloomPass } from "three/examples/jsm/postprocessing/UnrealBloomPass.js";

@@ -1,4 +1,4 @@
-import { RequestParams } from "../../../types";
+import { RequestParams } from "../types";
 
 export const parseArticleString = (
   input: string,

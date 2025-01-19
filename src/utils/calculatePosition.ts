@@ -1,4 +1,4 @@
-import { SCREEN_HEIGHT, SCREEN_WIDTH } from "../../../constants.ts";
+import { SCREEN_HEIGHT, SCREEN_WIDTH } from "../constants.ts";
 
 export const calculateDistance = (similarity: number) => {
   return (

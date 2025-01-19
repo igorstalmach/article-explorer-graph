@@ -2,7 +2,7 @@ import { GraphView } from "./components/Graph";
 import { SearchView } from "./components/Search";
 import { useState } from "react";
 import { ArticleResponse, RequestParams } from "./types";
-import { ApiService } from "./services/service.tsx";
+import { ApiService } from "./services/service.ts";
 import { Spin } from "antd";
 
 export const App = () => {

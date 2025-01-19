@@ -1,7 +1,7 @@
 import { Input, Select, Tooltip } from "antd";
 import { Typography } from "antd";
 import { useState } from "react";
-import { parseArticleString } from "./utils";
+import { parseArticleString } from "../../utils";
 import { RequestParams } from "../../types";
 
 const { Search } = Input;

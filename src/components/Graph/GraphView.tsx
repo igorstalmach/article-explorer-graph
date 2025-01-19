@@ -1,8 +1,8 @@
 import { useState } from "react";
-import { List, Modal, Switch, Typography } from "antd";
+import { List, Modal, Switch } from "antd";
 import { Graph3D } from "./Graph3D.tsx";
 import { Graph2D } from "./Graph2D.tsx";
-import { ArticleResponse } from "../../types";
+import { ArticleResponse, SimilarArticle } from "../../types";
 import Paragraph from "antd/es/typography/Paragraph";
 
 type GraphViewProps = {
@@ -12,13 +12,57 @@ type GraphViewProps = {
 export const GraphView = ({ articleData }: GraphViewProps) => {
   const [is3D, setIs3D] = useState(false);
   const [selectedId, setSelectedId] = useState<number | null>(null);
-  const [isModalOpen, setIsModalOpen] = useState<boolean>(true);
 
   const handleToggle = (value: number) => {
     if (value !== 0) {
       setSelectedId((prevValue) => (prevValue === value ? null : value));
     }
   };
+
+  const renderListItems = (item: SimilarArticle, index: number) => (
+    <span onClick={() => handleToggle(index + 1)}>
+      <List.Item
+        style={{
+          padding: "1rem",
+          backgroundColor: selectedId == index + 1 ? "#cfcaca" : "",
+          borderBottom: "1px solid rgba(0, 0, 0, 0.1)",
+        }}
+      >
+        <List.Item.Meta
+          title={item.title}
+          key={index}
+          description={item.abstract}
+        />
+        <div>
+          <b>Authors: </b>
+          {item.authors.map((author, authorIndex) => (
+            <span key={authorIndex}>
+              {author}
+              {authorIndex < item.authors.length - 1 ? ", " : ""}
+            </span>
+          ))}
+        </div>
+        <div>
+          {item.ids.arxiv_id && (
+            <div>
+              <strong>Arxiv ID:</strong> {item.ids.arxiv_id}
+            </div>
+          )}
+          {item.ids.doi && (
+            <div>
+              <strong>DOI:</strong> {item.ids.doi}
+            </div>
+          )}
+          {item.ids.scopus_id && (
+            <div>
+              <strong>Scopus ID:</strong> {item.ids.scopus_id}
+            </div>
+          )}
+        </div>
+        <b>Similarity: </b> {(item.similarity * 100).toFixed(2)}%
+      </List.Item>
+    </span>
+  );
 
   return (
     <div
@@ -34,53 +78,11 @@ export const GraphView = ({ articleData }: GraphViewProps) => {
           height: "100vh",
           overflow: "auto",
         }}
-        renderItem={(item, index) => (
-          <span onClick={() => handleToggle(index + 1)}>
-            <List.Item
-              style={{
-                padding: "1rem",
-                backgroundColor: selectedId == index + 1 ? "#cfcaca" : "",
-              }}
-            >
-              <List.Item.Meta
-                title={item.title}
-                key={index}
-                description={item.abstract}
-              />
-              <div>
-                <b>Authors: </b>
-                {item.authors.map((author, authorIndex) => (
-                  <span key={authorIndex}>
-                    {author}
-                    {authorIndex < item.authors.length - 1 ? ", " : ""}
-                  </span>
-                ))}
-              </div>
-              <div>
-                {item.ids.arxiv_id && (
-                  <div>
-                    <strong>Arxiv ID:</strong> {item.ids.arxiv_id}
-                  </div>
-                )}
-                {item.ids.doi && (
-                  <div>
-                    <strong>DOI:</strong> {item.ids.doi}
-                  </div>
-                )}
-                {item.ids.scopus_id && (
-                  <div>
-                    <strong>Scopus ID:</strong> {item.ids.scopus_id}
-                  </div>
-                )}
-              </div>
-              <b>Similarity: </b> {(item.similarity * 100).toFixed(2)}%
-            </List.Item>
-          </span>
-        )}
+        renderItem={renderListItems}
       />
       <Modal
-        open={isModalOpen}
-        onCancel={() => setIsModalOpen(false)}
+        open={true}
+        closable={false}
         mask={false}
         footer={null}
         style={{
@@ -93,31 +95,42 @@ export const GraphView = ({ articleData }: GraphViewProps) => {
         }}
       >
         <h3>
-          <b>{articleData.original_article.title}</b>
+          <b
+            style={{
+              fontSize: "1.5rem",
+              lineHeight: "1.75rem",
+              letterSpacing: "0.1px",
+            }}
+          >
+            {articleData.original_article.title}
+          </b>
         </h3>
         <p>
           {articleData.original_article.authors.map((author, authorIndex) => (
-            <Typography key={authorIndex}>
-              <b>
-                {" "}
-                {author}
-                {authorIndex < articleData.original_article.authors.length - 1
-                  ? ", "
-                  : ""}
-              </b>
-            </Typography>
+            <b key={authorIndex} style={{ opacity: "0.5" }}>
+              {author}
+              {authorIndex < articleData.original_article.authors.length - 1
+                ? ", "
+                : ""}
+            </b>
           ))}
         </p>
-        <p>
-          <Paragraph style={{ fontSize: "1rem" }}>
+        <p style={{ paddingTop: "0.75rem" }}>
+          <Paragraph
+            style={{
+              fontSize: "1rem",
+              maxHeight: "25vh",
+              overflowY: "scroll",
+            }}
+          >
             {articleData.original_article.abstract}
           </Paragraph>
           <div>
             {articleData.original_article.ids.arxiv_id && (
-              <div>
+              <a href={articleData.original_article.ids.arxiv_id}>
                 <strong>Arxiv ID:</strong>{" "}
                 {articleData.original_article.ids.arxiv_id}
-              </div>
+              </a>
             )}
             {articleData.original_article.ids.doi && (
               <div>
@@ -125,10 +138,10 @@ export const GraphView = ({ articleData }: GraphViewProps) => {
               </div>
             )}
             {articleData.original_article.ids.scopus_id && (
-              <div>
+              <a href={articleData.original_article.ids.scopus_id}>
                 <strong>Scopus ID:</strong>{" "}
                 {articleData.original_article.ids.scopus_id}
-              </div>
+              </a>
             )}
           </div>
         </p>

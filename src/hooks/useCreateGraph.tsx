@@ -1,15 +1,15 @@
 import { useEffect, useRef, useState } from "react";
-import { GraphData, GraphLinkType, GraphNodeType } from "../../../types";
+import { GraphData, GraphLinkType, GraphNodeType } from "../types";
 import * as d3 from "d3-force";
 import { calculateDistance } from "../utils";
-import { Article, ArticleResponse } from "../../../types";
+import { Article, ArticleResponse } from "../types";
 
 const LINK_COLOR = "#29727e";
 
 const MAIN_NODE_SIZE = 30;
 const MAIN_NODE_COLOR = "#cd3232";
 
-const GRAPH_WIDTH = 87;
+const GRAPH_WIDTH = 80;
 
 export const useCreateGraph = (articles: ArticleResponse) => {
   const forceGraphRef = useRef<any>();
@@ -63,8 +63,7 @@ export const useCreateGraph = (articles: ArticleResponse) => {
         target: 0,
         distance: calculateDistance(node.similarity),
         color: LINK_COLOR,
-        // TODO: Fix during integration with backend.
-        name: `Similarity: ${Number(node.similarity).toFixed(2)}`,
+        name: `Similarity: ${Number(node.similarity * 100).toFixed(2)}%`,
       });
     });
 
