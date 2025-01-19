@@ -20,11 +20,12 @@ export type GraphNodeType = {
 };
 
 export type GraphLinkType = {
-  source: number;
+  source: number | any;
   target: number;
   distance?: number;
   color?: string;
   name?: string;
+  
 };
 
 export type GraphData = {

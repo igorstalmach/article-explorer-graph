@@ -1,9 +1,8 @@
-import { Input, Select, Spin, Tooltip } from "antd";
+import { Input, Select, Tooltip } from "antd";
 import { Typography } from "antd";
 import { useState } from "react";
 import { parseArticleString } from "../../utils/utils";
 import { RequestParams } from "../../types";
-import { LoadingOutlined } from '@ant-design/icons';
 
 const { Search } = Input;
 const { Title } = Typography;

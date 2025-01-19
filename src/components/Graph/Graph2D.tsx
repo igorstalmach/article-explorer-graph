@@ -1,15 +1,13 @@
-import { GraphNodeType, GraphProps } from "./types.ts";
 import ForceGraph2D, { NodeObject } from "react-force-graph-2d";
-import { useCreateGraph, useCreateGraphA } from "./hooks";
+import {  useCreateGraphA } from "./hooks";
 import { ArticleResponse } from "../../types";
-import { useCallback, useEffect, useState } from "react";
-import { LinkObject } from "react-force-graph-3d";
+import { useEffect, useState } from "react";
 
 const NODE_SIZE = 8;
 
 const LINK_WIDTH = 3;
 const vwValue= 87
-export const Graph2D = ({ articles, selectedId, selectCallback }: { articles: ArticleResponse; selectedId: number | null }) => {
+export const Graph2D = ({ articles, selectedId, selectCallback }: { articles: ArticleResponse; selectedId: number | null | undefined; selectCallback: any}) => {
 
   const { graphData, forceGraphRef } = useCreateGraphA(articles);
   const [pixels, setPixels] = useState(0);

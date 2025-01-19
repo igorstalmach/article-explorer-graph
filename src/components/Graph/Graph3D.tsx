@@ -1,6 +1,6 @@
-import { GraphNodeType, GraphProps } from "./types.ts";
+import { GraphNodeType} from "./types.ts";
 import ForceGraph3D, { NodeObject } from "react-force-graph-3d";
-import { useCreateGraph, useCreateGraphA } from "./hooks";
+import { useCreateGraphA } from "./hooks";
 import { useCallback, useEffect, useState } from "react";
 import * as THREE from "three";
 import { UnrealBloomPass } from "three/examples/jsm/postprocessing/UnrealBloomPass.js";
@@ -13,7 +13,7 @@ const LINK_RESOLUTION = 32;
 const LINK_WIDTH = 2;
 const vwValue= 87
 
-export const Graph3D = ({ articles, selectedId, selectCallback }: { articles: ArticleResponse; selectedId: number | null }) => {
+export const Graph3D = ({ articles, selectedId, selectCallback }: { articles: ArticleResponse; selectedId: number | null | undefined; selectCallback: any }) => {
   const { graphData, forceGraphRef } = useCreateGraphA(
     articles
   );
@@ -43,8 +43,8 @@ export const Graph3D = ({ articles, selectedId, selectCallback }: { articles: Ar
   const handleNodeClick = useCallback(
     (node: GraphNodeType) => {
       selectCallback(node.id)
-      const distance = 80;
-      const distRatio = 1 + distance / Math.hypot(node.x!, node.y!, node.z!);
+      // const distance = 80;
+      // const distRatio = 1 + distance / Math.hypot(node.x!, node.y!, node.z!);
 
       // forceGraphRef.current.cameraPosition(
       //   {
