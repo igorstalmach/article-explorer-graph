@@ -1,6 +1,6 @@
 import { ArticleResponse, RequestParams } from "../types";
 
-const API_BASE_URL = "http://127.0.0.1:8000";
+const API_BASE_URL = "https://articlewebapp-h0heexfzapaga3bw.polandcentral-01.azurewebsites.net";
 const API_GET_POST_PATH = "article/similar/";
 
 export class ApiService {
