@@ -2,26 +2,24 @@ import { useState } from "react";
 import { List, Modal, Switch, Typography } from "antd";
 import { Graph3D } from "./Graph3D.tsx";
 import { Graph2D } from "./Graph2D.tsx";
-import { NodeType } from "./types.ts";
 import { ArticleResponse } from "../../types";
 import Paragraph from "antd/es/typography/Paragraph";
 
-
-export const GraphView = ({
-  articleData
-}: {
+type GraphViewProps = {
   articleData: ArticleResponse;
-}) => {
+};
+
+export const GraphView = ({ articleData }: GraphViewProps) => {
   const [is3D, setIs3D] = useState(false);
-  const [selectedId, setSelectedId] = useState<number | null>();
-  const [isModalOpen, setIsModalOpen] = useState<boolean>(true)
+  const [selectedId, setSelectedId] = useState<number | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(true);
 
   const handleToggle = (value: number) => {
-    if(value !== 0){
+    if (value !== 0) {
       setSelectedId((prevValue) => (prevValue === value ? null : value));
-
     }
   };
+
   return (
     <div
       style={{
@@ -33,15 +31,15 @@ export const GraphView = ({
         itemLayout="vertical"
         dataSource={articleData.similar_articles}
         style={{
-          height:"100vh",
-          overflow: "auto"
+          height: "100vh",
+          overflow: "auto",
         }}
         renderItem={(item, index) => (
           <span onClick={() => handleToggle(index + 1)}>
             <List.Item
               style={{
                 padding: "1rem",
-                backgroundColor: selectedId == index+1 ? "#cfcaca" : ""
+                backgroundColor: selectedId == index + 1 ? "#cfcaca" : "",
               }}
             >
               <List.Item.Meta
@@ -75,7 +73,7 @@ export const GraphView = ({
                   </div>
                 )}
               </div>
-              <b>Similiarity: </b> {(item.similarity * 100).toFixed(2)}%
+              <b>Similarity: </b> {(item.similarity * 100).toFixed(2)}%
             </List.Item>
           </span>
         )}
@@ -99,17 +97,21 @@ export const GraphView = ({
         </h3>
         <p>
           {articleData.original_article.authors.map((author, authorIndex) => (
-            <Typography key={authorIndex} >
-             <b> {author}
-              {authorIndex < articleData.original_article.authors.length - 1
-                ? ", "
-                : ""}
-                </b>
+            <Typography key={authorIndex}>
+              <b>
+                {" "}
+                {author}
+                {authorIndex < articleData.original_article.authors.length - 1
+                  ? ", "
+                  : ""}
+              </b>
             </Typography>
           ))}
         </p>
         <p>
-          <Paragraph style={{fontSize: "1rem"}}>{articleData.original_article.abstract}</Paragraph>
+          <Paragraph style={{ fontSize: "1rem" }}>
+            {articleData.original_article.abstract}
+          </Paragraph>
           <div>
             {articleData.original_article.ids.arxiv_id && (
               <div>
@@ -138,9 +140,17 @@ export const GraphView = ({
         onChange={() => setIs3D(!is3D)}
       />
       {is3D ? (
-        <Graph3D articles={articleData} selectedId={selectedId} selectCallback={handleToggle}/>
+        <Graph3D
+          articles={articleData}
+          selectedId={selectedId}
+          selectCallback={handleToggle}
+        />
       ) : (
-        <Graph2D articles={articleData} selectedId={selectedId} selectCallback={handleToggle}/>
+        <Graph2D
+          articles={articleData}
+          selectedId={selectedId}
+          selectCallback={handleToggle}
+        />
       )}
     </div>
   );

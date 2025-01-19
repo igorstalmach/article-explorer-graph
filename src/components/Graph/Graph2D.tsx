@@ -1,34 +1,21 @@
-import { GraphNodeType, GraphProps } from "./types.ts";
 import ForceGraph2D, { NodeObject } from "react-force-graph-2d";
-import { useCreateGraph, useCreateGraphA } from "./hooks";
-import { ArticleResponse } from "../../types";
-import { useCallback, useEffect, useState } from "react";
-import { LinkObject } from "react-force-graph-3d";
+import { useCreateGraph } from "./hooks";
+import { GraphProps } from "../../types";
 
 const NODE_SIZE = 8;
-
 const LINK_WIDTH = 3;
-const vwValue= 87
-export const Graph2D = ({ articles, selectedId, selectCallback }: { articles: ArticleResponse; selectedId: number | null }) => {
 
-  const { graphData, forceGraphRef } = useCreateGraphA(articles);
-  const [pixels, setPixels] = useState(0);
-
-  useEffect(() => {
-    const calculatePixels = () => {
-      const pxValue = (window.innerWidth * vwValue) / 100;
-      setPixels(pxValue);
-    };
-
-    calculatePixels();
-    window.addEventListener('resize', calculatePixels);
-
-    return () => window.removeEventListener('resize', calculatePixels);
-  }, [vwValue]);
+export const Graph2D = ({
+  articles,
+  selectedId,
+  selectCallback,
+}: GraphProps) => {
+  const { graphData, forceGraphRef, forceGraphWidth } =
+    useCreateGraph(articles);
 
   const handlePaintTarget = (
     node: NodeObject,
-    ctx: CanvasRenderingContext2D
+    ctx: CanvasRenderingContext2D,
   ) => {
     ctx.beginPath();
     ctx.fillStyle = node.id === selectedId ? "#1677ff" : node.color;
@@ -44,18 +31,13 @@ export const Graph2D = ({ articles, selectedId, selectCallback }: { articles: Ar
     ctx.fill();
   };
 
-
-
   const handleNodeClick = (node: NodeObject) => {
-    console.log(node)
-    selectCallback(node.id)
-  }
-
-
+    selectCallback(Number(node.id));
+  };
 
   return (
     <ForceGraph2D
-    width={pixels}
+      width={forceGraphWidth}
       graphData={graphData}
       ref={forceGraphRef}
       backgroundColor={"#000011"}
@@ -68,8 +50,13 @@ export const Graph2D = ({ articles, selectedId, selectCallback }: { articles: Ar
       nodeCanvasObject={handlePaintTarget}
       onNodeClick={handleNodeClick}
       onLinkClick={(link) => console.log(link)}
-      linkColor={(link) => link.source.id == selectedId ? "#1677ff" : link.color? link.color : "grey"}
-
+      linkColor={(link) =>
+        (link.source as any).id == selectedId
+          ? "#1677ff"
+          : link.color
+            ? link.color
+            : "grey"
+      }
     />
   );
 };

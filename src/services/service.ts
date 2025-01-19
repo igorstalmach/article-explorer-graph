@@ -13,8 +13,9 @@ export class ApiService {
         ...(params.top_n && { top_n: params.top_n.toString() }), // Add top_n only if it's provided
       }).toString();
 
-      const url = new URL(`${API_BASE_URL}/${API_GET_POST_PATH}?${queryParams}`);
-
+      const url = new URL(
+        `${API_BASE_URL}/${API_GET_POST_PATH}?${queryParams}`,
+      );
       const response = await fetch(url);
 
       if (!response.ok) {

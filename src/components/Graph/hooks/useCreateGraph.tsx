@@ -1,8 +1,7 @@
-import { UseCreateGraphProps } from "./types.ts";
-import { useEffect, useRef } from "react";
-import { GraphData, GraphLinkType, GraphNodeType, NodeType } from "../types.ts";
+import { useEffect, useRef, useState } from "react";
+import { GraphData, GraphLinkType, GraphNodeType } from "../../../types";
 import * as d3 from "d3-force";
-import { calculateDistance, getRandomColor } from "../utils";
+import { calculateDistance } from "../utils";
 import { Article, ArticleResponse } from "../../../types";
 
 const LINK_COLOR = "#29727e";
@@ -10,10 +9,14 @@ const LINK_COLOR = "#29727e";
 const MAIN_NODE_SIZE = 30;
 const MAIN_NODE_COLOR = "#cd3232";
 
-export const useCreateGraphA = (articles: ArticleResponse) => {
+const GRAPH_WIDTH = 87;
+
+export const useCreateGraph = (articles: ArticleResponse) => {
   const forceGraphRef = useRef<any>();
 
-  const mainNode: Article = articles.original_article
+  const [forceGraphWidth, setForceGraphWidth] = useState(0);
+
+  const mainNode: Article = articles.original_article;
   const initialGraphData: GraphData = {
     nodes: [
       {
@@ -33,79 +36,35 @@ export const useCreateGraphA = (articles: ArticleResponse) => {
     );
   }, []);
 
-  const getNodes = () => {
-    const newNodes: GraphNodeType[] = [];
-    const newLinks: GraphLinkType[] = [];
-
-    articles.similar_articles.forEach((node,index) => {
-      newNodes.push({
-        id: index+1,
-        name: node.title,
-        color: "#eed78c",
-      });
-      newLinks.push({
-        source: index+1,
-        target: 0,
-        distance: calculateDistance(node.similarity),
-        color: LINK_COLOR,
-        // TODO: Fix during integration with backend.
-        name: `Similarity: ${(Number(node.similarity)).toFixed(2)}`,
-      });
-    });
-
-    return {
-      nodes: [...initialGraphData.nodes, ...newNodes],
-      links: [...initialGraphData.links, ...newLinks],
-    };
-  };
-
-  return { graphData: getNodes(), forceGraphRef } as const;
-};
-
-export const useCreateGraph = ({ nodes }: UseCreateGraphProps) => {
-  const forceGraphRef = useRef<any>();
-
-  const mainNode: NodeType = nodes.filter((node) => node.isTarget)[0];
-  const initialGraphData: GraphData = {
-    nodes: [
-      {
-        id: mainNode && mainNode.id,
-        name: mainNode && mainNode.name,
-        color: MAIN_NODE_COLOR,
-        size: MAIN_NODE_SIZE,
-      },
-    ],
-    links: [],
-  };
-
   useEffect(() => {
-    forceGraphRef.current.d3Force(
-      "link",
-      d3.forceLink().distance((link: any) => link.distance),
-    );
+    const calculatePixels = () => {
+      const pxValue = (window.innerWidth * GRAPH_WIDTH) / 100;
+      setForceGraphWidth(pxValue);
+    };
+
+    calculatePixels();
+    window.addEventListener("resize", calculatePixels);
+
+    return () => window.removeEventListener("resize", calculatePixels);
   }, []);
 
   const getNodes = () => {
     const newNodes: GraphNodeType[] = [];
     const newLinks: GraphLinkType[] = [];
 
-    nodes.forEach((node) => {
-      if (node.isTarget) {
-        return;
-      }
-
+    articles.similar_articles.forEach((node, index) => {
       newNodes.push({
-        id: node.id,
-        name: node.name,
-        color: getRandomColor(),
+        id: index + 1,
+        name: node.title,
+        color: "#eed78c",
       });
       newLinks.push({
-        source: mainNode.id,
-        target: node.id,
+        source: index + 1,
+        target: 0,
         distance: calculateDistance(node.similarity),
         color: LINK_COLOR,
         // TODO: Fix during integration with backend.
-        name: `Similarity: ${(1 - Number(node.similarity)).toFixed(2)}`,
+        name: `Similarity: ${Number(node.similarity).toFixed(2)}`,
       });
     });
 
@@ -115,5 +74,5 @@ export const useCreateGraph = ({ nodes }: UseCreateGraphProps) => {
     };
   };
 
-  return { graphData: getNodes(), forceGraphRef } as const;
+  return { graphData: getNodes(), forceGraphRef, forceGraphWidth } as const;
 };
