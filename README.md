@@ -1,23 +1,32 @@
 # Article Similarity Graph
 
-The **Article Similarity Graph** is a tool designed to help you visually explore how different articles relate to one central article. It enables easy navigation through related content, showing which articles are more or less connected to your topic of interest.
+The **Article Similarity Graph** is an advanced visualization tool designed to assist users in exploring relationships between articles in a structured and intuitive manner. By analyzing connections between topics, the tool helps uncover insights, patterns, and relationships within large sets of articles.
 
-## Features
+![User Interface](images/screenshot.png)
 
-- **Central Focus**: The main article appears at the center of the graph, with related articles positioned around it. The closer an article is to the center, the more similar it is to the main topic.
+---
 
-- **Clustering and Zooming**:
+## Key Features
 
-  - As you zoom out, closely related articles automatically **group into clusters**. These clusters appear as larger circles, making it easier to view groups of similar articles without clutter.
-  - When you zoom back in, the clusters **separate into individual articles** again for detailed exploration.
+### **Centralized Focus**
+- The primary article is prominently displayed at the center of the graph.
+- Related articles are positioned around the main article, with proximity indicating the degree of similarity.
 
-- **Interactive Exploration**:
-  - Hover over articles or clusters to see titles and additional information.
+### **Interactive Exploration**
+- Click on any article node to view detailed metadata and associated information.
+- Seamlessly navigate between articles to explore their connections in-depth.
 
-## Benefits
+### **Efficient Identification of Related Content**
+- Instantly identify the most relevant articles related to your primary topic.
+- Save time by focusing on the most pertinent information in a dataset.
 
-- **Quickly Identify Related Articles**: Instantly see which articles are most similar to your central topic.
-- **Identify Content Clusters**: Zoom out to spot natural groupings of articles, giving a big-picture view of related topics.
-- **Flexible, User-Friendly Navigation**: Move seamlessly between detailed and big-picture views, exploring content in an intuitive, organized way.
+### **Flexible and User-Friendly Navigation**
+- Switch between detailed views and a high-level overview effortlessly.
+- Explore content with intuitive, responsive, and customizable controls.
 
-The Article Similarity Graph offers a powerful and professional way to analyze connections between topics, helping you discover insights and navigate content with ease.
+### **Customization Options**
+- Define the number of related articles displayed on the graph.
+
+### **Integration with ArXiv and Scopus**
+- Input ArXiv article identifiers (arXiv ID) for seamless integration with the ArXiv database.
+- Utilize Scopus article identifiers for cross-referencing and enhanced discovery.

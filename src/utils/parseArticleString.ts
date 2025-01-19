@@ -1,6 +1,9 @@
 import { RequestParams } from "../types";
 
-export function parseArticleString(input: string, querySize: number): RequestParams | null{
+export const parseArticleString = (
+  input: string,
+  querySize: number,
+): RequestParams | null => {
   const arxivIdRegex = /(?:https?:\/\/)?(?:arxiv\.org\/abs\/)?(\d{4}\.\d{5})/;
   const arxivIdMatch = input.match(arxivIdRegex);
   if (arxivIdMatch) {
@@ -8,7 +11,7 @@ export function parseArticleString(input: string, querySize: number): RequestPar
       article_id: arxivIdMatch[1],
       site: "arxiv",
       id_type: "arxiv_id",
-      top_n: querySize
+      top_n: querySize,
     };
   }
 
@@ -20,7 +23,7 @@ export function parseArticleString(input: string, querySize: number): RequestPar
       article_id: arxivDoiMatch[1],
       site: "arxiv",
       id_type: "arxiv_doi",
-      top_n: querySize
+      top_n: querySize,
     };
   }
 
@@ -31,7 +34,7 @@ export function parseArticleString(input: string, querySize: number): RequestPar
       article_id: scopusIdMatch[1],
       site: "scopus",
       id_type: "scopus_id",
-      top_n: querySize
+      top_n: querySize,
     };
   }
 
@@ -42,9 +45,9 @@ export function parseArticleString(input: string, querySize: number): RequestPar
       article_id: scopusDoiMatch[1],
       site: "scopus",
       id_type: "scopus_doi",
-      top_n: querySize
+      top_n: querySize,
     };
   }
 
-  return null
-}
+  return null;
+};
