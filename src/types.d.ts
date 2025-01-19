@@ -1,5 +1,3 @@
-declare module "*.css";
-
 type ArticleIds = {
   arxiv_id: string;
   doi: string;

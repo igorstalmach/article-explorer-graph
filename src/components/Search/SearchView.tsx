@@ -1,4 +1,4 @@
-import { Input, Select, Tooltip } from "antd";
+import { Input, Select, Space, Tooltip } from "antd";
 import { Typography } from "antd";
 import { useState } from "react";
 import { parseArticleString } from "../../utils";
@@ -54,8 +54,7 @@ export const SearchView = ({ handleSearch, isActive }: SearchViewProps) => {
         }
       >
         {isActive && <Title>Article Explorer</Title>}
-
-        <div
+        <Space.Compact
           style={{
             display: "flex",
             width: "100%",
@@ -75,7 +74,7 @@ export const SearchView = ({ handleSearch, isActive }: SearchViewProps) => {
           <Tooltip
             trigger={["focus"]}
             title={
-              "Supported formats: arXiv link or arXiv article ID (e.g. 2412.12081)"
+              "An article ID (e.g. 2412.12081) or a link to arXiv or Scopus is supported"
             }
             placement="bottomLeft"
           >
@@ -87,7 +86,7 @@ export const SearchView = ({ handleSearch, isActive }: SearchViewProps) => {
               enterButton
             />
           </Tooltip>
-        </div>
+        </Space.Compact>
       </div>
     </div>
   );
