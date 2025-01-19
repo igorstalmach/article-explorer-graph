@@ -75,7 +75,7 @@ export const SearchView = ({ handleSearch, isActive }: SearchViewProps) => {
           <Tooltip
             trigger={["focus"]}
             title={
-              "An article ID (e.g. 2412.12081) or a link to arXiv or Scopus is supported"
+              "An article ID (e.g. 2412.12081) or a link to arXiv or Scopus is required"
             }
             placement="bottomLeft"
           >
