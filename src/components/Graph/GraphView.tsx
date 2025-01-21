@@ -13,10 +13,13 @@ type GraphViewProps = {
 export const GraphView = ({ articleData }: GraphViewProps) => {
   const [is3D, setIs3D] = useState(false);
   const [selectedId, setSelectedId] = useState<number | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(true);
 
   const handleToggle = (value: number) => {
     if (value !== 0) {
       setSelectedId((prevValue) => (prevValue === value ? null : value));
+    } else {
+      setIsModalOpen(true);
     }
   };
 
@@ -82,17 +85,17 @@ export const GraphView = ({ articleData }: GraphViewProps) => {
         renderItem={renderListItems}
       />
       <Modal
-        open={true}
-        closable={false}
+        open={isModalOpen}
+        onCancel={() => setIsModalOpen(false)}
         mask={false}
         footer={null}
         style={{
-          right: "10rem",
-          top: "25vh",
+          right: "5rem",
+          top: "15vh",
           margin: 0,
           position: "fixed",
-          width: "30vw", // Adjust width as needed
-          height: "100vh", // Full screen height
+          width: "10vw", // Adjust width as needed
+          height: "45vh", // Full screen height
         }}
       >
         <h3>
