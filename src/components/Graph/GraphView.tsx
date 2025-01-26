@@ -95,7 +95,9 @@ export const GraphView = ({ articleData, handleGraphClick }: GraphViewProps) => 
         <div>
           {item.ids.arxiv_id && (
             <div>
+              <a href={item.ids.arxiv_id} target="_blank">
               <strong>Arxiv ID:</strong> {item.ids.arxiv_id}
+              </a>
             </div>
           )}
           {item.ids.doi && (
@@ -223,7 +225,7 @@ export const GraphView = ({ articleData, handleGraphClick }: GraphViewProps) => 
           </Paragraph>
           <div>
             {articleData.original_article.ids.arxiv_id && (
-              <a href={articleData.original_article.ids.arxiv_id}>
+              <a href={articleData.original_article.ids.arxiv_id} target="_blank">
                 <strong>Arxiv ID:</strong>{" "}
                 {articleData.original_article.ids.arxiv_id}
               </a>
