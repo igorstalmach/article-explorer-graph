@@ -1,31 +1,77 @@
-import { List, Modal, Switch } from "antd";
+import { Button, List, Modal, Switch } from "antd";
 import Paragraph from "antd/es/typography/Paragraph";
-import { useState } from "react";
+import {  useRef, useState } from "react";
+import Draggable from 'react-draggable';
+import type { DraggableData, DraggableEvent } from 'react-draggable';
 
 import { ArticleResponse, SimilarArticle } from "../../types";
 import { Graph2D } from "./Graph2D.tsx";
 import { Graph3D } from "./Graph3D.tsx";
+import { NodeObject } from "react-force-graph-2d";
 
 type GraphViewProps = {
   articleData: ArticleResponse;
+  handleGraphClick: any
 };
 
-export const GraphView = ({ articleData }: GraphViewProps) => {
+export const GraphView = ({ articleData, handleGraphClick }: GraphViewProps) => {
   const [is3D, setIs3D] = useState(false);
-  const [selectedId, setSelectedId] = useState<number | null>(null);
+  const listRef = useRef<Array<HTMLDivElement | null>>([]);
+  const subListRef = useRef<Array<HTMLDivElement | null>>([]);
+  const [bounds, setBounds] = useState({ left: 0, top: 0, bottom: 0, right: 0 });
+  const draggleRef = useRef<HTMLDivElement>(null!);
+  const [selectedId, setSelectedId] = useState<number | null | string>(null);
   const [isModalOpen, setIsModalOpen] = useState(true);
 
-  const handleToggle = (value: number) => {
-    if (value !== 0) {
-      setSelectedId((prevValue) => (prevValue === value ? null : value));
+  const onStart = (_event: DraggableEvent, uiData: DraggableData) => {
+    const { clientWidth, clientHeight } = window.document.documentElement;
+    const targetRect = draggleRef.current?.getBoundingClientRect();
+    if (!targetRect) {
+      return;
+    }
+    setBounds({
+      left: -targetRect.left + uiData.x,
+      right: clientWidth - (targetRect.right - uiData.x),
+      top: -targetRect.top + uiData.y,
+      bottom: clientHeight - (targetRect.bottom - uiData.y),
+    });
+  };
+
+  const scrollToItem = (index : number) => {
+
+    if (listRef.current[index]) {
+      listRef.current[index].scrollIntoView({
+        behavior: "smooth",
+        block: "center",
+      });
+    }
+
+  };
+  
+  const handleToggle = (value: number | string, node?: NodeObject ) => {
+    if (value !== 0 && (node !== undefined && node.id !== undefined && node.id !== null && node.id != 0)) {
+      console.log(node.id.toString().split("-"))
+      
+      setSelectedId((prevValue) => (prevValue === node.id ? null : node.id));
+      handleGraphClick(node)
+
+        scrollToItem(Number.parseInt(node.id.toString().split("-")[0])-1)
     } else {
       setIsModalOpen(true);
     }
   };
 
-  const renderListItems = (item: SimilarArticle, index: number) => (
+  const toggleSubList = (index : number) => {
+    if (subListRef.current[index]) {
+      subListRef.current[index].style.display = subListRef.current[index].style.display === "none" ? "block" : "none"
+    }
+  };
+
+  const renderListItems = (item: SimilarArticle, index: number, ) => (
     <span onClick={() => handleToggle(index + 1)}>
       <List.Item
+      ref={(el) => (listRef.current[index] = el)}
+      id={index + "-item"}
         style={{
           padding: "1rem",
           backgroundColor: selectedId == index + 1 ? "#cfcaca" : "",
@@ -62,6 +108,22 @@ export const GraphView = ({ articleData }: GraphViewProps) => {
               <strong>Scopus ID:</strong> {item.ids.scopus_id}
             </div>
           )}
+          {item.subArticles && 
+          (
+            <>
+            <Button onClick={() => toggleSubList(index)}>Display sublist</Button> 
+          <List
+          ref={(el) => (subListRef.current[index] = el)}
+            itemLayout="vertical"
+            dataSource={item.subArticles.similar_articles}
+            style={{
+              display: "none",
+              height: "20vh",
+              overflow: "auto",
+            }}
+            renderItem={(item: SimilarArticle, index: number) =>renderListItems(item, index)}
+          />
+          </>)}
         </div>
         <b>Similarity: </b> {(item.similarity * 100).toFixed(2)}%
       </List.Item>
@@ -89,6 +151,26 @@ export const GraphView = ({ articleData }: GraphViewProps) => {
         onCancel={() => setIsModalOpen(false)}
         mask={false}
         footer={null}
+        title={
+          <div
+            style={{ width: '100%', cursor: 'move' }}
+            onMouseOver={() => {
+              if (!isModalOpen) {
+                // setIsModalOpen(true);
+              }
+            }}
+            onMouseOut={() => {
+              //setIsModalOpen(false);
+            }}
+            // fix eslintjsx-a11y/mouse-events-have-key-events
+            // https://github.com/jsx-eslint/eslint-plugin-jsx-a11y/blob/master/docs/rules/mouse-events-have-key-events.md
+            onFocus={() => {}}
+            onBlur={() => {}}
+            // end
+          >
+            Draggable Modal
+          </div>
+        }
         style={{
           right: "5rem",
           top: "15vh",
@@ -97,8 +179,18 @@ export const GraphView = ({ articleData }: GraphViewProps) => {
           width: "10vw", // Adjust width as needed
           height: "45vh", // Full screen height
         }}
-      >
-        <h3>
+        modalRender={(modal) => (
+<Draggable
+      disabled={!isModalOpen}
+      bounds={bounds}
+      nodeRef={draggleRef}
+      onStart={(event, uiData) => onStart(event, uiData)}
+    >
+      <div ref={draggleRef}>{modal}</div>
+        </Draggable>
+        )}
+      >         
+              <h3>
           <b
             style={{
               fontSize: "1.5rem",

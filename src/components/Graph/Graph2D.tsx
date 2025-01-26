@@ -33,8 +33,9 @@ export const Graph2D = ({
   };
 
   const handleNodeClick = (node: NodeObject) => {
-    selectCallback(Number(node.id));
+    selectCallback((node.id).toString(), node);
   };
+
 
   return (
     <ForceGraph2D
@@ -50,7 +51,6 @@ export const Graph2D = ({
       linkDirectionalParticleWidth={LINK_WIDTH}
       nodeCanvasObject={handlePaintTarget}
       onNodeClick={handleNodeClick}
-      onLinkClick={(link) => console.log(link)}
       linkColor={(link) =>
         (link.source as any).id == selectedId
           ? "#1677ff"

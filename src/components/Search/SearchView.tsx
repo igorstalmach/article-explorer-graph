@@ -11,11 +11,17 @@ const { Title } = Typography;
 type SearchViewProps = {
   handleSearch: (arg0: RequestParams | null) => void;
   isActive: boolean;
+  querySizeCallback: (arg0: number) => void
 };
 
-export const SearchView = ({ handleSearch, isActive }: SearchViewProps) => {
+export const SearchView = ({ handleSearch, isActive, querySizeCallback }: SearchViewProps) => {
   const [articleLink, setArticleLink] = useState("");
   const [querySize, setQuerySize] = useState(5);
+
+  const handleQuerySize = (size: number) => {
+    setQuerySize(size)
+    querySizeCallback(size)
+  }
 
   const handleSubmitSearch = () => {
     handleSearch(parseArticleString(articleLink, querySize));
@@ -64,7 +70,7 @@ export const SearchView = ({ handleSearch, isActive }: SearchViewProps) => {
           <Select
             defaultValue="5"
             style={{ width: 70 }}
-            onChange={(value) => setQuerySize(Number.parseInt(value))}
+            onChange={(value) => handleQuerySize(Number.parseInt(value))}
             options={[
               { value: "5", label: "5" },
               { value: "10", label: "10" },
