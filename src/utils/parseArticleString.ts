@@ -7,7 +7,8 @@ export const parseArticleString = (
   console.log(input);
 
   // New regex for old arXiv format (e.g., math/0605476v2)
-  const oldArxivIdRegex = /(?:https?:\/\/)?(?:arxiv\.org\/abs\/)?([a-zA-Z-]+\/\d{7}(?:v\d+)?)/;
+  const oldArxivIdRegex =
+    /(?:https?:\/\/)?(?:arxiv\.org\/abs\/)?([a-zA-Z-]+\/\d{7}(?:v\d+)?)/;
   const oldArxivIdMatch = input.match(oldArxivIdRegex);
   if (oldArxivIdMatch) {
     return {
@@ -19,7 +20,8 @@ export const parseArticleString = (
   }
 
   // Updated regex for new-style arXiv IDs with optional version suffix
-  const arxivIdRegex = /(?:https?:\/\/)?(?:arxiv\.org\/abs\/)?(\d{4,5}\.\d{4,5}(?:v\d+)?)/;
+  const arxivIdRegex =
+    /(?:https?:\/\/)?(?:arxiv\.org\/abs\/)?(\d{4,5}\.\d{4,5}(?:v\d+)?)/;
 
   const arxivIdMatch = input.match(arxivIdRegex);
   if (arxivIdMatch) {

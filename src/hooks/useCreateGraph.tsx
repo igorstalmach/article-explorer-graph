@@ -1,7 +1,12 @@
 import * as d3 from "d3-force";
 import { useEffect, useRef, useState } from "react";
 
-import { GraphData, GraphLinkType, GraphNodeType, SimilarArticle } from "../types";
+import {
+  GraphData,
+  GraphLinkType,
+  GraphNodeType,
+  SimilarArticle,
+} from "../types";
 import { Article, ArticleResponse } from "../types";
 import { calculateDistance } from "../utils";
 
@@ -49,39 +54,54 @@ export const useCreateGraph = (articles: ArticleResponse) => {
     return () => window.removeEventListener("resize", calculatePixels);
   }, []);
 
-  const getNodesAndLinks = (simArticles : SimilarArticle[], targetId?:number | string): {nodes: GraphNodeType[], links: GraphLinkType[]} => {
+  const getNodesAndLinks = (
+    simArticles: SimilarArticle[],
+    targetId?: number | string,
+  ): { nodes: GraphNodeType[]; links: GraphLinkType[] } => {
     let newNodes: GraphNodeType[] = [];
     let newLinks: GraphLinkType[] = [];
 
     simArticles.forEach((node, index) => {
       newNodes.push({
-        id: targetId !== undefined ? targetId + "-" + Number(index+ 1) : index + 1,
+        id:
+          targetId !== undefined
+            ? targetId + "-" + Number(index + 1)
+            : index + 1,
         name: node.title,
         color: "#eed78c",
       });
       newLinks.push({
-        source: targetId !== undefined ? targetId + "-" + Number(index+ 1) : index + 1,
+        source:
+          targetId !== undefined
+            ? targetId + "-" + Number(index + 1)
+            : index + 1,
         target: targetId !== undefined ? targetId : 0,
         distance: calculateDistance(node.similarity),
         color: LINK_COLOR,
         name: `Similarity: ${Number(node.similarity * 100).toFixed(2)}%`,
       });
 
-      if(node.subArticles !== undefined){
-        let nextTargetId = targetId !== undefined ? targetId + "-" + Number(index+ 1) : index +1
-        let additionalNodes = getNodesAndLinks(node.subArticles.similar_articles, nextTargetId)
+      if (node.subArticles !== undefined) {
+        let nextTargetId =
+          targetId !== undefined
+            ? targetId + "-" + Number(index + 1)
+            : index + 1;
+        let additionalNodes = getNodesAndLinks(
+          node.subArticles.similar_articles,
+          nextTargetId,
+        );
 
-        newNodes = newNodes.concat(additionalNodes.nodes)
-        newLinks = newLinks.concat(additionalNodes.links)
+        newNodes = newNodes.concat(additionalNodes.nodes);
+        newLinks = newLinks.concat(additionalNodes.links);
       }
     });
-    return {nodes: newNodes, links: newLinks}
-  }
+    return { nodes: newNodes, links: newLinks };
+  };
 
   const getNodes = () => {
-    let data = getNodesAndLinks(articles.similar_articles)
-    let newNodes = data.nodes
-    let newLinks = data.links
+    let data = getNodesAndLinks(articles.similar_articles);
+    let newNodes = data.nodes;
+    let newLinks = data.links;
 
     return {
       nodes: [...initialGraphData.nodes, ...newNodes],

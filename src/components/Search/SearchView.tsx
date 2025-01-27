@@ -11,17 +11,21 @@ const { Title } = Typography;
 type SearchViewProps = {
   handleSearch: (arg0: RequestParams | null) => void;
   isActive: boolean;
-  querySizeCallback: (arg0: number) => void
+  querySizeCallback: (arg0: number) => void;
 };
 
-export const SearchView = ({ handleSearch, isActive, querySizeCallback }: SearchViewProps) => {
+export const SearchView = ({
+  handleSearch,
+  isActive,
+  querySizeCallback,
+}: SearchViewProps) => {
   const [articleLink, setArticleLink] = useState("");
   const [querySize, setQuerySize] = useState(5);
 
   const handleQuerySize = (size: number) => {
-    setQuerySize(size)
-    querySizeCallback(size)
-  }
+    setQuerySize(size);
+    querySizeCallback(size);
+  };
 
   const handleSubmitSearch = () => {
     handleSearch(parseArticleString(articleLink, querySize));

@@ -33,9 +33,8 @@ export const Graph2D = ({
   };
 
   const handleNodeClick = (node: NodeObject) => {
-    selectCallback((node.id).toString(), node);
+    selectCallback(node.id.toString(), node);
   };
-
 
   return (
     <ForceGraph2D
