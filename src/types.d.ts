@@ -1,7 +1,9 @@
+import { NodeObject } from "react-force-graph-2d";
+
 type ArticleIds = {
-  arxiv_id: string;
-  doi: string;
-  scopus_id: string;
+  arxiv_id?: string;
+  doi?: string;
+  scopus_id?: string;
 };
 
 type Article = {
@@ -18,6 +20,7 @@ type SimilarArticle = {
   authors: string[];
   abstract: string;
   similarity: number;
+  subArticles?: ArticleResponse;
 };
 
 export type ArticleResponse = {
@@ -41,12 +44,12 @@ export type NodeType = {
 
 type GraphProps = {
   articles: ArticleResponse;
-  selectedId: number | null;
-  selectCallback: (value: number) => void;
+  selectedId: number | string | null;
+  selectCallback: (value: number | string, node?: NodeObject) => void;
 };
 
 export type GraphNodeType = {
-  id: number;
+  id: number | string;
   name?: string;
   x?: number;
   y?: number;
@@ -56,8 +59,8 @@ export type GraphNodeType = {
 };
 
 export type GraphLinkType = {
-  source: number;
-  target: number;
+  source: number | string;
+  target: number | string;
   distance?: number;
   color?: string;
   name?: string;
