@@ -42,31 +42,8 @@ export const ArticleInfo = ({
     });
   };
 
-  return (
-    <Modal
-      open={isOpen}
-      onCancel={() => setIsOpen(false)}
-      mask={false}
-      footer={null}
-      style={{
-        right: "5rem",
-        top: "15vh",
-        margin: 0,
-        position: "fixed",
-        width: "10vw", // Adjust width as needed
-        height: "45vh", // Full screen height
-      }}
-      modalRender={(modal) => (
-        <Draggable
-          disabled={!isOpen}
-          bounds={bounds}
-          nodeRef={draggableRef}
-          onStart={(event, uiData) => onStart(event, uiData)}
-        >
-          <div ref={draggableRef}>{modal}</div>
-        </Draggable>
-      )}
-    >
+  const renderData = () => (
+    <>
       <h3>
         <b
           style={{
@@ -88,7 +65,7 @@ export const ArticleInfo = ({
           </b>
         ))}
       </p>
-      <p style={{ paddingTop: "0.75rem" }}>
+      <div style={{ paddingTop: "0.75rem" }}>
         <Paragraph
           style={{
             fontSize: "1rem",
@@ -115,7 +92,36 @@ export const ArticleInfo = ({
             {articleData.original_article.ids.scopus_id}
           </a>
         )}
-      </p>
+      </div>
+    </>
+  );
+
+  return (
+    <Modal
+      open={isOpen}
+      onCancel={() => setIsOpen(false)}
+      mask={false}
+      footer={null}
+      style={{
+        right: "5rem",
+        top: "15vh",
+        margin: 0,
+        position: "fixed",
+        width: "10vw", // Adjust width as needed
+        height: "45vh", // Full screen height
+      }}
+      modalRender={(modal) => (
+        <Draggable
+          disabled={!isOpen}
+          bounds={bounds}
+          nodeRef={draggableRef}
+          onStart={(event, uiData) => onStart(event, uiData)}
+        >
+          <div ref={draggableRef}>{modal}</div>
+        </Draggable>
+      )}
+    >
+      {renderData()}
     </Modal>
   );
 };

@@ -1,12 +1,13 @@
 import { Button, List } from "antd";
 import { MutableRefObject, useRef } from "react";
+import { NodeObject } from "react-force-graph-2d";
 
 import { ArticleResponse, SimilarArticle } from "../../../../types";
 
 type ArticleListProps = {
   articleData: ArticleResponse;
   selectedId: string | undefined;
-  handleToggle: (value: number | string) => void;
+  handleToggle: (value: string, node?: NodeObject) => void;
   listRef: MutableRefObject<Array<HTMLDivElement | null>>;
 };
 
@@ -26,7 +27,7 @@ export const ArticleList = ({
   };
 
   const renderListItems = (item: SimilarArticle, index: number) => (
-    <span onClick={() => handleToggle(index + 1)}>
+    <span onClick={() => handleToggle(String(index + 1))}>
       <List.Item
         ref={(el) => (listRef.current[index] = el)}
         id={index + "-item"}
@@ -68,6 +69,9 @@ export const ArticleList = ({
               <strong>Scopus ID:</strong> {item.ids.scopus_id}
             </div>
           )}
+        </div>
+        <b>Similarity: </b> {(item.similarity * 100).toFixed(2)}%
+        <div style={{ paddingTop: "1rem" }}>
           {item.subArticles && (
             <>
               <Button onClick={() => toggleSubList(index)}>
@@ -89,7 +93,6 @@ export const ArticleList = ({
             </>
           )}
         </div>
-        <b>Similarity: </b> {(item.similarity * 100).toFixed(2)}%
       </List.Item>
     </span>
   );

@@ -45,7 +45,7 @@ export type NodeType = {
 type GraphProps = {
   articles: ArticleResponse;
   selectedId: string | undefined;
-  selectCallback: (value: number | string, node?: NodeObject) => void;
+  selectCallback: (value: string, node?: NodeObject) => void;
 };
 
 export type GraphNodeType = {

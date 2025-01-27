@@ -57,7 +57,6 @@ export const App = () => {
 
       // Update the entire state to trigger re-render
       setArticles({ ...data, similar_articles: updatedArticles });
-
       setIsLoading(false);
     } catch (err) {
       messageApi.open({

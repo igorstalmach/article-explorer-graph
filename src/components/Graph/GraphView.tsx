@@ -32,8 +32,8 @@ export const GraphView = ({
     }
   };
 
-  const handleToggle = (value: number | string, node?: NodeObject) => {
-    if (value !== 0 && node) {
+  const handleToggle = (value: string, node?: NodeObject) => {
+    if (value !== "0" && node) {
       setSelectedId((prevValue) =>
         prevValue === node.id ? undefined : String(node.id),
       );
