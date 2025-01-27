@@ -31,7 +31,7 @@ export const Graph3D = ({
   }, []);
 
   const handleNodeClick = useCallback(
-    (node: GraphNodeType) => selectCallback(node.id),
+    (node: GraphNodeType) => selectCallback(String(node.id)),
     [forceGraphRef],
   );
 
