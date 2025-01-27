@@ -27,7 +27,6 @@ export const App = () => {
       setIsLoading(true);
 
       const data = await ApiService.fetchPosts(params);
-      console.log("Articles before processing:", data.similar_articles);
       const updatedArticles = await Promise.all(
         data.similar_articles.map(async (article) => {
           const ids = article.ids;
@@ -40,11 +39,9 @@ export const App = () => {
                   ? ids.scopus_id
                   : null
             : null;
-          console.log(articleId);
 
           if (articleId !== null && articleId !== undefined) {
             const params = parseArticleString(articleId, querySize);
-            console.log(params);
 
             if (params !== null) {
               const subArticleData = await getData(params);
@@ -72,14 +69,13 @@ export const App = () => {
   };
 
   const getData = async (params: RequestParams): Promise<ArticleResponse> => {
-    const data = await ApiService.fetchPosts(params);
-    return data;
+    return await ApiService.fetchPosts(params);
   };
 
-  function getNestedArticle(
+  const getNestedArticle = (
     articles: ArticleResponse | undefined,
     path: string,
-  ): SimilarArticle | undefined {
+  ): SimilarArticle | undefined => {
     // If no articles or empty path, return undefined
     if (!articles || !path) {
       return undefined;
@@ -102,7 +98,7 @@ export const App = () => {
     }
 
     return result;
-  }
+  };
 
   const handleGraphClick = async (node: NodeObject) => {
     if (articles !== null && node !== undefined && node.id !== undefined) {

@@ -4,8 +4,6 @@ export const parseArticleString = (
   input: string,
   querySize: number,
 ): RequestParams | null => {
-  console.log(input);
-
   // New regex for old arXiv format (e.g., math/0605476v2)
   const oldArxivIdRegex =
     /(?:https?:\/\/)?(?:arxiv\.org\/abs\/)?([a-zA-Z-]+\/\d{7}(?:v\d+)?)/;
@@ -67,6 +65,5 @@ export const parseArticleString = (
     };
   }
 
-  console.log("going to be null");
   return null;
 };
