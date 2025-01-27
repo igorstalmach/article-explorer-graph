@@ -31,9 +31,11 @@ export const ArticleInfo = ({
   const onStart = (_event: DraggableEvent, uiData: DraggableData) => {
     const { clientWidth, clientHeight } = window.document.documentElement;
     const targetRect = draggableRef.current?.getBoundingClientRect();
+
     if (!targetRect) {
       return;
     }
+
     setBounds({
       left: -targetRect.left + uiData.x,
       right: clientWidth - (targetRect.right - uiData.x),

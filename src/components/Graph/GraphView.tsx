@@ -10,7 +10,7 @@ import { ArticleList } from "./components/ArticleList";
 
 type GraphViewProps = {
   articleData: ArticleResponse;
-  handleGraphClick: any;
+  handleGraphClick: (node: NodeObject) => void;
 };
 
 export const GraphView = ({
@@ -33,7 +33,7 @@ export const GraphView = ({
   };
 
   const handleToggle = (value: string, node?: NodeObject) => {
-    if (value !== "0" && node) {
+    if (value !== "0" && node && node.id && String(node.id) !== "0") {
       setSelectedId((prevValue) =>
         prevValue === node.id ? undefined : String(node.id),
       );
