@@ -2,7 +2,7 @@ import { Switch } from "antd";
 import { useRef, useState } from "react";
 import { NodeObject } from "react-force-graph-2d";
 
-import { ArticleResponse } from "../../types";
+import { Article, ArticleResponse, SimilarArticle } from "../../types";
 import { Graph2D } from "./Graph2D.tsx";
 import { Graph3D } from "./Graph3D.tsx";
 import { ArticleInfo } from "./components/ArticleInfo";
@@ -22,6 +22,9 @@ export const GraphView = ({
   const [is3D, setIs3D] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(true);
   const [selectedId, setSelectedId] = useState<string>();
+  const [selectedArticle, setSelectedArticle] = useState<
+    Article | SimilarArticle
+  >(articleData.original_article);
 
   const scrollToItem = (index: number) => {
     if (listRef.current[index]) {
@@ -32,15 +35,35 @@ export const GraphView = ({
     }
   };
 
-  const handleToggle = (value: string, node?: NodeObject) => {
-    if (value !== "0" && node && node.id && String(node.id) !== "0") {
+  const handleToggle = (node: NodeObject) => {
+    if (node && node.id && String(node.id) !== "0") {
       setSelectedId((prevValue) =>
         prevValue === node.id ? undefined : String(node.id),
       );
       handleGraphClick(node);
       scrollToItem(Number.parseInt(String(node.id).split("-")[0]) - 1);
+
+      const selectedArticle =
+        articleData.original_article.title === node.name
+          ? articleData.original_article
+          : articleData.similar_articles.find(
+              (article) => article.title === node.name,
+            );
+      setSelectedArticle((prevState) => selectedArticle || prevState);
     } else {
       setIsModalOpen(true);
+    }
+  };
+
+  const getSimilarArticles = () => {
+    if (
+      selectedArticle &&
+      "subArticles" in selectedArticle &&
+      selectedArticle.subArticles
+    ) {
+      return selectedArticle.subArticles.similar_articles;
+    } else {
+      return articleData.similar_articles;
     }
   };
 
@@ -51,14 +74,9 @@ export const GraphView = ({
         display: "flex",
       }}
     >
-      <ArticleList
-        listRef={listRef}
-        articleData={articleData}
-        selectedId={selectedId}
-        handleToggle={handleToggle}
-      />
+      <ArticleList listRef={listRef} similarArticles={getSimilarArticles()} />
       <ArticleInfo
-        articleData={articleData}
+        article={selectedArticle}
         isOpen={isModalOpen}
         setIsOpen={setIsModalOpen}
       />
