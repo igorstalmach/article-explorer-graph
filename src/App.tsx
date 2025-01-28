@@ -1,4 +1,5 @@
-import { Spin, message } from "antd";
+import { QuestionCircleOutlined } from "@ant-design/icons";
+import { Modal, Spin, message } from "antd";
 import { useState } from "react";
 import { NodeObject } from "react-force-graph-2d";
 
@@ -7,6 +8,8 @@ import { SearchView } from "./components/Search";
 import { ApiService } from "./services";
 import { ArticleResponse, RequestParams, SimilarArticle } from "./types";
 import { parseArticleString } from "./utils";
+
+const { confirm } = Modal;
 
 export const App = () => {
   const [articles, setArticles] = useState<ArticleResponse | null>(null);
@@ -122,14 +125,24 @@ export const App = () => {
           : null;
 
         if (articleId !== null && articleId !== undefined) {
-          const params = parseArticleString(articleId, querySize);
+          confirm({
+            title: "Search for similar articles to this node?",
+            icon: <QuestionCircleOutlined />,
+            content: "This may take a moment",
+            async onOk() {
+              const params = parseArticleString(articleId, querySize);
 
-          if (params !== null) {
-            setIsLoading(true);
-            const data = await ApiService.fetchPosts(params);
-            setIsLoading(false);
-            simArticle.subArticles = data;
-          }
+              if (params !== null) {
+                setIsLoading(true);
+                const data = await ApiService.fetchPosts(params);
+                setIsLoading(false);
+                simArticle.subArticles = data;
+              }
+            },
+            onCancel() {
+              return;
+            },
+          });
         }
       }
     }

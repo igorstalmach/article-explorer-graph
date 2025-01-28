@@ -1,27 +1,15 @@
-import { Button, List } from "antd";
-import { MutableRefObject, useRef } from "react";
+import { List } from "antd";
 
 import { SimilarArticle } from "../../../../types";
 
 type ArticleListProps = {
   similarArticles: SimilarArticle[];
-  listRef: MutableRefObject<Array<HTMLDivElement | null>>;
 };
 
-export const ArticleList = ({ similarArticles, listRef }: ArticleListProps) => {
-  const subListRef = useRef<Array<HTMLDivElement | null>>([]);
-
-  const toggleSubList = (index: number) => {
-    if (subListRef.current[index]) {
-      subListRef.current[index].style.display =
-        subListRef.current[index].style.display === "none" ? "block" : "none";
-    }
-  };
-
+export const ArticleList = ({ similarArticles }: ArticleListProps) => {
   const renderListItems = (item: SimilarArticle, index: number) => (
     <span>
       <List.Item
-        ref={(el) => (listRef.current[index] = el)}
         id={index + "-item"}
         style={{
           padding: "1rem",
@@ -62,28 +50,6 @@ export const ArticleList = ({ similarArticles, listRef }: ArticleListProps) => {
           )}
         </div>
         <b>Similarity: </b> {(item.similarity * 100).toFixed(2)}%
-        <div style={{ paddingTop: "1rem" }}>
-          {item.subArticles && (
-            <>
-              <Button onClick={() => toggleSubList(index)}>
-                Display sublist
-              </Button>
-              <List
-                ref={(el) => (subListRef.current[index] = el)}
-                itemLayout="vertical"
-                dataSource={item.subArticles.similar_articles}
-                style={{
-                  display: "none",
-                  height: "20vh",
-                  overflow: "auto",
-                }}
-                renderItem={(item: SimilarArticle, index: number) =>
-                  renderListItems(item, index)
-                }
-              />
-            </>
-          )}
-        </div>
       </List.Item>
     </span>
   );

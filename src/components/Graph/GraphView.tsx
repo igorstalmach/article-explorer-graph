@@ -1,5 +1,5 @@
 import { Switch } from "antd";
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { NodeObject } from "react-force-graph-2d";
 
 import { Article, ArticleResponse, SimilarArticle } from "../../types";
@@ -17,8 +17,6 @@ export const GraphView = ({
   articleData,
   handleGraphClick,
 }: GraphViewProps) => {
-  const listRef = useRef<Array<HTMLDivElement | null>>([]);
-
   const [is3D, setIs3D] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(true);
   const [selectedId, setSelectedId] = useState<string>();
@@ -26,31 +24,34 @@ export const GraphView = ({
     Article | SimilarArticle
   >(articleData.original_article);
 
-  const scrollToItem = (index: number) => {
-    if (listRef.current[index]) {
-      listRef.current[index].scrollIntoView({
-        behavior: "smooth",
-        block: "center",
-      });
+  const getNestedArticle = (
+    node: NodeObject,
+    currentArticleData: ArticleResponse,
+  ) => {
+    if (node.name === currentArticleData.original_article.title) {
+      setSelectedArticle(currentArticleData.original_article);
+      return;
+    }
+
+    for (const article of currentArticleData.similar_articles) {
+      if (article.title === node.name) {
+        setSelectedArticle(article);
+        return;
+      }
+    }
+
+    for (const article of currentArticleData.similar_articles) {
+      if ("subArticles" in article && article.subArticles) {
+        getNestedArticle(node, article.subArticles);
+      }
     }
   };
 
   const handleToggle = (node: NodeObject) => {
-    if (node && node.id && String(node.id) !== "0") {
-      setSelectedId((prevValue) =>
-        prevValue === node.id ? undefined : String(node.id),
-      );
+    if (node) {
+      setSelectedId(String(node.id));
       handleGraphClick(node);
-      scrollToItem(Number.parseInt(String(node.id).split("-")[0]) - 1);
-
-      const selectedArticle =
-        articleData.original_article.title === node.name
-          ? articleData.original_article
-          : articleData.similar_articles.find(
-              (article) => article.title === node.name,
-            );
-      setSelectedArticle((prevState) => selectedArticle || prevState);
-    } else {
+      getNestedArticle(node, articleData);
       setIsModalOpen(true);
     }
   };
@@ -74,7 +75,7 @@ export const GraphView = ({
         display: "flex",
       }}
     >
-      <ArticleList listRef={listRef} similarArticles={getSimilarArticles()} />
+      <ArticleList similarArticles={getSimilarArticles()} />
       <ArticleInfo
         article={selectedArticle}
         isOpen={isModalOpen}
