@@ -19,11 +19,11 @@ export const Graph2D = ({
     ctx: CanvasRenderingContext2D,
   ) => {
     ctx.beginPath();
-    ctx.fillStyle = node.id === selectedId ? "#1677ff" : node.color;
+    ctx.fillStyle = String(node.id) === selectedId ? "#1677ff" : node.color;
 
     if (node.size) {
       ctx.arc(node.x!, node.y!, 15, 0, 2 * Math.PI, false);
-    } else if (node.id === selectedId) {
+    } else if (String(node.id) === selectedId) {
       ctx.arc(node.x!, node.y!, 10, 0, 2 * Math.PI, false);
     } else {
       ctx.arc(node.x!, node.y!, 5, 0, 2 * Math.PI, false);
@@ -33,7 +33,7 @@ export const Graph2D = ({
   };
 
   const handleNodeClick = (node: NodeObject) => {
-    selectCallback(String(node.id), node);
+    selectCallback(node);
   };
 
   return (
